@@ -6,5 +6,5 @@ public abstract class Question
         this.questionString = questionString;
     }
     public abstract string getQuestion();
-    public abstract float multiplier(string answer);
+    public abstract (float,string) getMultiplier(string answer);
 }

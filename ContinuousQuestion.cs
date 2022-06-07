@@ -9,7 +9,7 @@ namespace DTP_Assessment_2022
         {
             this.answer = answer;
         }
-        public override float multiplier(string guess)
+        public override (float, string) getMultiplier(string guess)
         {
             //try to cast to desired type
             string trimmed = guess.Trim();
@@ -39,12 +39,28 @@ namespace DTP_Assessment_2022
             /*
             Ratio = userAnswer/answer
             Multiplier = 3 * min(1/Ratio,Ratio)
+            Prevent really bad muls
+            Multiplier = max(0.5,multiplier)
             */
             // this throws an error which should be caught by the main question loop if the users answer was of the incorrect form.
             float ratio = userGuess / answer;
-            return (3 * Math.Min(1/ratio,ratio));
+            float multiplier = (3 * Math.Min(1 / ratio, ratio));
+            string quote;
+            if (multiplier > 2.99)
+            {
+                quote = "Dead On!";
+            }
+            else if(userGuess < answer)
+            {
+                quote = "Too low.";
+            }
+            else
+            {
+                quote = "Too high.";
+            }
+            return (((float)Math.Max(0.5, multiplier),quote));
         }
-        public override string getQuestion() => questionString + $" Answer like {decimal.Round((decimal)(new Random().NextDouble() * 50),1)} or {new Random().NextInt64(1,10)}";
+        public override string getQuestion() => questionString + $" Answer like {decimal.Round((decimal)(new Random().NextDouble() * 50), 1)} or {new Random().NextInt64(1, 10)}";
         //show a hint to make it clear to the user the format to answer in
     }
 }

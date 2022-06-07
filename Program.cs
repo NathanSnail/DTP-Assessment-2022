@@ -1,8 +1,14 @@
 ﻿using System;
-internal static class Program
+namespace DTP_Assessment_2022
 {
-    static void Main(string[] args)
+    internal static class Program
     {
-        Console.WriteLine("Hello World!");
+        static void Main(string[] args)
+        {
+            ContinuousQuestion testQ = new ContinuousQuestion("What integer is pi nearest to?", 3);
+            Console.WriteLine(testQ.getQuestion());
+            string answer = Console.ReadLine();
+            Console.WriteLine(testQ.getMultiplier(answer));
+        }
     }
 }
