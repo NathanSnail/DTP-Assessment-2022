@@ -15,7 +15,7 @@ namespace DTP_Assessment_2022
             Dino enemy = creature.MakeClone();
             // Console.WriteLine(enemy.getDamage(-5));
             enemy.takeDamage(50);
-            enemy.attacks[0] = new Attack(1,1,1,1,1,712,111,"fake");
+            enemy.attacks[0] = new Attack(1,1,1,1,1,712,111,"faker");
             Console.WriteLine(enemy.health);
             Console.WriteLine(creature.health);
             Console.WriteLine(enemy.attacks[0].maxUses);
