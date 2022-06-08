@@ -60,7 +60,7 @@ namespace DTP_Assessment_2022
             }
             return (((float)Math.Max(0.5, multiplier),quote));
         }
-        public override string getQuestion() => questionString + $" Answer like {decimal.Round((decimal)(new Random().NextDouble() * 50), 1)} or {new Random().NextInt64(1, 10)}";
+        public override string getQuestion() => questionString + $" (Answers should be formatted like {decimal.Round((decimal)(new Random().NextDouble() * 50), 1)} or {new Random().NextInt64(1, 10)})";
         //show a hint to make it clear to the user the format to answer in
     }
 }
