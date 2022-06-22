@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 namespace DTP_Assessment_2022
 {
     internal static class Program
@@ -7,9 +9,15 @@ namespace DTP_Assessment_2022
         static Dino[] playerDinos = new Dino[6];
         static int selectedDino = 0;
         static bool typeWriteOn = true;
+        static List<Dino> dinos;
         static void Main(string[] args)
         {
             MainMenu();
+        }
+        static void genDinos()
+        {
+            JsonNode data = JsonNode.Parse(System.IO.File.ReadAllText("data.txt"));
+            
         }
         static void MainMenu()
         {
@@ -84,8 +92,14 @@ The effects of a move will scale up with how accurately you answer the question.
             }
             while (true)
             {
-                
+                Battle();
             }
+        }
+        static void Battle()
+        {
+            Dino curEnemy = dinos[new Random().Next(0,dinos.Count-1)].MakeClone();
+            Dino PlayerDino = playerDinos[selectedDino];
+            PlayerDino.takeDamage(10);
         }
     }
 }
