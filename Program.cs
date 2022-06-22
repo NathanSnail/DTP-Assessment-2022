@@ -9,15 +9,57 @@ namespace DTP_Assessment_2022
         static Dino[] playerDinos = new Dino[6];
         static int selectedDino = 0;
         static bool typeWriteOn = true;
-        static List<Dino> dinos;
+        static List<Dino> dinos = new List<Dino>();
+        static List<Attack> attacks = new List<Attack>();
         static void Main(string[] args)
         {
+            genDinos();
             MainMenu();
         }
         static void genDinos()
         {
-            JsonNode data = JsonNode.Parse(System.IO.File.ReadAllText("data.txt"));
-            
+            JsonNode data = JsonNode.Parse(System.IO.File.ReadAllText("data.json"));
+            JsonNode attacksJson = data["attacks"];
+            for (int i = 0; i < attacksJson.AsArray().Count; i++)
+            {
+                string name = attacksJson.AsArray()[i]["name"].GetValue<string>();
+                int selfDefense = attacksJson.AsArray()[i]["selfDefense"].GetValue<int>();
+                int selfAttack = attacksJson.AsArray()[i]["selfAttack"].GetValue<int>();
+                int enemyDefense = attacksJson.AsArray()[i]["enemyDefense"].GetValue<int>();
+                int enemyAttack = attacksJson.AsArray()[i]["enemyAttack"].GetValue<int>();
+                int maxUses = attacksJson.AsArray()[i]["maxUses"].GetValue<int>();
+                attacks.Add(new Attack(selfDefense, selfAttack, enemyDefense, enemyAttack, maxUses, name));
+            }
+            JsonNode dinosJson = data["dinos"];
+            for (int i = 0; i < dinosJson.AsArray().Count; i++)
+            {
+                string name = dinosJson.AsArray()[i]["name"].GetValue<string>();
+                int hp = dinosJson.AsArray()[i]["hp"].GetValue<int>();
+                int attack = dinosJson.AsArray()[i]["attack"].GetValue<int>();
+                int defense = dinosJson.AsArray()[i]["defense"].GetValue<int>();
+                List<Attack> dinoAttacks = new List<Attack>();
+                JsonArray attacksArray = dinosJson.AsArray()[i]["attacks"].AsArray();
+                for(int j = 0; j < 3; j++)
+                {
+                    for(int k = 0; k < attacks.Count; k++)
+                    {
+                        if(attacks[k].name == attacksArray[j].ToString())
+                        {
+                            dinoAttacks.Add(attacks[k]);
+                        }
+                    }
+                }
+                dinos.Add(new Dino(hp,attack,defense,dinoAttacks.ToArray(),name).MakeClone());
+            }
+            foreach(Attack a in attacks)
+            {
+                Console.WriteLine(a.name);
+            }
+            foreach(Dino d in dinos)
+            {
+                Console.WriteLine(d.name);
+            }
+            throw new Exception();
         }
         static void MainMenu()
         {
@@ -79,7 +121,7 @@ The effects of a move will scale up with how accurately you answer the question.
             Sleep(2500);
             TypeWrite("\nWould you like to begin? Y / N");
             string choice = Console.ReadKey().KeyChar.ToString().ToLower();
-            if(choice=="y")
+            if (choice == "y")
             {
                 Console.Clear();
                 TypeWrite("Ok. Lets begin!");
@@ -97,7 +139,7 @@ The effects of a move will scale up with how accurately you answer the question.
         }
         static void Battle()
         {
-            Dino curEnemy = dinos[new Random().Next(0,dinos.Count-1)].MakeClone();
+            Dino curEnemy = dinos[new Random().Next(0, dinos.Count - 1)].MakeClone();
             Dino PlayerDino = playerDinos[selectedDino];
             PlayerDino.takeDamage(10);
         }

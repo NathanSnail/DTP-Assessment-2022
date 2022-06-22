@@ -1,19 +1,27 @@
 {
     "attacks": [{
-        "name": "Swipe",
-        "selfDefense": 0,
-        "selfAttack": 0,
-        "enemyDefense": 0,
-        "enemyAttack": 5,
-        "maxUses": 50
-    }],
+            "name": "Swipe",
+            "selfDefense": 0,
+            "selfAttack": 0,
+            "enemyDefense": 0,
+            "enemyAttack": 5,
+            "maxUses": 50
+        },
+        {
+            "name": "Scare",
+            "selfDefense": -1,
+            "selfAttack": 2,
+            "enemyDefense": -7,
+            "enemyAttack": 0,
+            "maxUses": 50
+        }
+    ],
     "dinos": [{
         "name": "Basic",
         "hp": 10,
         "attack": 1,
         "defense": 0,
         "attacks": [
-            "Swipe",
             "Swipe",
             "Swipe",
             "Swipe"
