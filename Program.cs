@@ -51,15 +51,6 @@ namespace DTP_Assessment_2022
                 }
                 dinos.Add(new Dino(hp,attack,defense,dinoAttacks.ToArray(),name).MakeClone());
             }
-            foreach(Attack a in attacks)
-            {
-                Console.WriteLine(a.name);
-            }
-            foreach(Dino d in dinos)
-            {
-                Console.WriteLine(d.name);
-            }
-            throw new Exception();
         }
         static void MainMenu()
         {
