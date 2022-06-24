@@ -41,9 +41,9 @@
             "attack": 0,
             "defense": 0,
             "attacks": [
-                "Swipe",
-                "Swipe",
-                "Swipe"
+                "Empty",
+                "Empty",
+                "Empty"
             ]
         }
     ]

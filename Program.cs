@@ -14,7 +14,35 @@ namespace DTP_Assessment_2022
         static void Main(string[] args)
         {
             genDinos();
+            Dino empty = getDino("Empty");
+            playerDinos[0] = getDino("Basic");
+            for (int i = 0; i < 5; i++)
+            {
+                playerDinos[i + 1] = empty.MakeClone();
+            }
             MainMenu();
+        }
+        static Dino getDino(string name)
+        {
+            for (int i = 0; i < dinos.Count; i++)
+            {
+                if (dinos[i].name == name)
+                {
+                    return (dinos[i].MakeClone());
+                }
+            }
+            return null;
+        }
+        static Attack GetAttack(string name)
+        {
+            for (int i = 0; i < attacks.Count; i++)
+            {
+                if (attacks[i].name == name)
+                {
+                    return (attacks[i]);
+                }
+            }
+            return null;
         }
         static void genDinos()
         {
@@ -39,17 +67,11 @@ namespace DTP_Assessment_2022
                 int defense = dinosJson.AsArray()[i]["defense"].GetValue<int>();
                 List<Attack> dinoAttacks = new List<Attack>();
                 JsonArray attacksArray = dinosJson.AsArray()[i]["attacks"].AsArray();
-                for(int j = 0; j < 3; j++)
+                for (int j = 0; j < 3; j++)
                 {
-                    for(int k = 0; k < attacks.Count; k++)
-                    {
-                        if(attacks[k].name == attacksArray[j].ToString())
-                        {
-                            dinoAttacks.Add(attacks[k]);
-                        }
-                    }
+                    dinoAttacks.Add(GetAttack(attacksArray[j].ToString()));
                 }
-                dinos.Add(new Dino(hp,attack,defense,dinoAttacks.ToArray(),name).MakeClone());
+                dinos.Add(new Dino(hp, attack, defense, dinoAttacks.ToArray(), name).MakeClone());
             }
         }
         static void MainMenu()
