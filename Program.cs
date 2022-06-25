@@ -5,20 +5,23 @@ namespace DTP_Assessment_2022
 {
     internal static class Program
     {
-        static Dino enemy;
         static Dino[] playerDinos = new Dino[6];
         static int selectedDino = 0;
         static bool typeWriteOn = true;
         static List<Dino> dinos = new List<Dino>();
         static List<Attack> attacks = new List<Attack>();
+        static Random random = new Random();
         static void Main(string[] args)
         {
             genDinos();
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.WriteLine(dinos[0].name + " " + dinos[0].attacks[1].name);
+            Console.BackgroundColor = ConsoleColor.Black;
             Dino empty = getDino("Empty");
             playerDinos[0] = getDino("Basic");
-            for (int i = 0; i < 5; i++)
+            for (int i = 1; i < 6; i++)
             {
-                playerDinos[i + 1] = empty.MakeClone();
+                playerDinos[i] = empty.MakeClone();
             }
             MainMenu();
         }
@@ -28,7 +31,13 @@ namespace DTP_Assessment_2022
             {
                 if (dinos[i].name == name)
                 {
-                    return (dinos[i].MakeClone());
+                    Dino d = dinos[i].MakeClone();
+                    int attackID = random.Next(0, attacks.Count);
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.WriteLine(name + " " + attackID);
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    d.attacks[3] = attacks[attackID];
+                    return (d);
                 }
             }
             return null;
@@ -71,12 +80,13 @@ namespace DTP_Assessment_2022
                 {
                     dinoAttacks.Add(GetAttack(attacksArray[j].ToString()));
                 }
+                dinoAttacks.Add(GetAttack("Empty"));
                 dinos.Add(new Dino(hp, attack, defense, dinoAttacks.ToArray(), name).MakeClone());
             }
         }
         static void MainMenu()
         {
-            Console.Clear();
+            //Console.Clear();
             string title = System.IO.File.ReadAllText("title.txt");
             Console.WriteLine(title);
             Console.WriteLine(
@@ -87,7 +97,7 @@ press 2 to toggle typewriter mode (Currently {(typeWriteOn ? "On" : "Off")})");
             switch (choice.KeyChar.ToString())
             {
                 case "1":
-                    Console.Clear();
+                    //Console.Clear();
                     MainGame();
                     break;
                 case "2":
@@ -101,7 +111,7 @@ press 2 to toggle typewriter mode (Currently {(typeWriteOn ? "On" : "Off")})");
         }
         static void ClearKeyBuffer()
         {
-            while (Console.KeyAvailable) { Console.ReadKey(false); };
+            while (Console.KeyAvailable) { Console.ReadKey(true); };
         }
 
 
@@ -136,8 +146,10 @@ The effects of a move will scale up with how accurately you answer the question.
             string choice = Console.ReadKey().KeyChar.ToString().ToLower();
             if (choice == "y")
             {
-                Console.Clear();
+                //Console.Clear();
                 TypeWrite("Ok. Lets begin!");
+                Sleep(1000);
+                //Console.Clear();
             }
             else
             {
@@ -152,9 +164,32 @@ The effects of a move will scale up with how accurately you answer the question.
         }
         static void Battle()
         {
-            Dino curEnemy = dinos[new Random().Next(0, dinos.Count - 1)].MakeClone();
+
+            foreach (Attack a in attacks)
+            {
+                Console.WriteLine(a.name);
+            }
+            Dino curEnemy = dinos[random.Next(0, dinos.Count)].MakeClone(); //FIXME: might return Empty
             Dino PlayerDino = playerDinos[selectedDino];
-            PlayerDino.takeDamage(10);
+            TypeWrite($"Battle between your {PlayerDino.name} and enemy {curEnemy.name}");
+            Sleep(250);
+            while (PlayerDino.health > 0 && curEnemy.health > 0)
+            {
+                TypeWrite($"Friendly {PlayerDino.name} health is {PlayerDino.health}\nEnemy {curEnemy.name} health is {curEnemy.health}\n");
+                TypeWrite(
+@$"Select attack
+    1: {PlayerDino.attacks[0].name}
+    2: {PlayerDino.attacks[1].name}
+    3: {PlayerDino.attacks[2].name}
+    4: {PlayerDino.attacks[3].name}
+");
+                string option = Console.ReadKey().KeyChar.ToString();
+                switch (option)
+                {
+                    case "1":
+                        break;
+                }
+            }
         }
     }
 }
