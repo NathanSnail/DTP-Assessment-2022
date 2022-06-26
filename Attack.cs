@@ -22,12 +22,12 @@ namespace DTP_Assessment_2022
         void useAttack(float multiplier, Dino selfDino, Dino enemyDino)
         {
             //amount > 0 ? amount * (float)Math.Log(Math.Max(attack,0)+2) : amount;
-            if(uses <= 0)
+            if (uses <= 0)
             {
                 return;
             }
             uses -= 1;
-            float enemyDamage = enemyAttack > 0 ? enemyAttack * (float)Math.Log(Math.Max(selfDino.attack,0)+2) : enemyAttack;
+            float enemyDamage = enemyAttack > 0 ? enemyAttack * (float)Math.Log(Math.Max(selfDino.attack, 0) + 2) : enemyAttack;
             enemyDino.takeDamage(enemyDamage > 0 ? enemyDamage * multiplier : enemyDamage / multiplier);
             selfDino.takeDamage(selfAttack > 0 ? selfAttack / multiplier : selfAttack * multiplier);
             enemyDino.defense -= enemyDefense > 0 ? enemyDefense * multiplier : enemyDefense / multiplier;
