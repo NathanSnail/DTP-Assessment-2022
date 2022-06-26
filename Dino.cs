@@ -6,11 +6,11 @@ namespace DTP_Assessment_2022
         //special case if dmg < 0 ie healing move
         public int maxHealth;
         public float health;
-        public int defense;
-        public int attack;
+        public float defense;
+        public float attack;
         public string name;
         public Attack[] attacks = new Attack[4];
-        public Dino(int maxHealth, int attack, int defense, Attack[] attacks, string name)
+        public Dino(int maxHealth, float attack, float defense, Attack[] attacks, string name)
         {
             this.maxHealth = maxHealth;
             this.health = maxHealth;
@@ -20,7 +20,6 @@ namespace DTP_Assessment_2022
             this.name = name;
         }
         public void takeDamage(float amount) => health -= amount > 0 ? Math.Max(amount - defense,0) : amount;
-        public float getDamage(float amount) => amount > 0 ? amount * (float)Math.Log(Math.Max(attack,0)+2) : amount;
         public Dino MakeClone() => new Dino(maxHealth,attack,defense,attacks.ToArray(),name);
     }
 }

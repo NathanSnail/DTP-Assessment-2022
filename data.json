@@ -11,7 +11,7 @@
             "name": "Scare",
             "selfDefense": -1,
             "selfAttack": 2,
-            "enemyDefense": -7,
+            "enemyDefense": 7,
             "enemyAttack": 0,
             "maxUses": 50
         },

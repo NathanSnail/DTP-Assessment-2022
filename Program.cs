@@ -13,7 +13,7 @@ namespace DTP_Assessment_2022
         static Random random = new Random();
         static void Main(string[] args)
         {
-            genDinos();
+            genData();
             Console.BackgroundColor = ConsoleColor.Green;
             Console.WriteLine(dinos[0].name + " " + dinos[0].attacks[1].name);
             Console.BackgroundColor = ConsoleColor.Black;
@@ -53,7 +53,7 @@ namespace DTP_Assessment_2022
             }
             return null;
         }
-        static void genDinos()
+        static void genData()
         {
             JsonNode data = JsonNode.Parse(System.IO.File.ReadAllText("data.json"));
             JsonNode attacksJson = data["attacks"];
