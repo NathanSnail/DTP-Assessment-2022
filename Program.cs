@@ -14,9 +14,6 @@ namespace DTP_Assessment_2022
         static void Main(string[] args)
         {
             genData();
-            Console.BackgroundColor = ConsoleColor.Green;
-            Console.WriteLine(dinos[0].name + " " + dinos[0].attacks[1].name);
-            Console.BackgroundColor = ConsoleColor.Black;
             Dino empty = getDino("Empty");
             playerDinos[0] = getDino("Basic");
             for (int i = 1; i < 6; i++)
@@ -33,9 +30,6 @@ namespace DTP_Assessment_2022
                 {
                     Dino d = dinos[i].MakeClone();
                     int attackID = random.Next(0, attacks.Count);
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine(name + " " + attackID);
-                    Console.BackgroundColor = ConsoleColor.Black;
                     d.attacks[3] = attacks[attackID];
                     return (d);
                 }
@@ -84,9 +78,27 @@ namespace DTP_Assessment_2022
                 dinos.Add(new Dino(hp, attack, defense, dinoAttacks.ToArray(), name).MakeClone());
             }
         }
+        static void StackOverflowTest(Dino d, int i)
+        {
+            /*Test to see if stack overflow is an issue due to functions calling themselves in case
+            of bad input. Crashes after ~20,000 calls which given the 50 battles would require the user
+            to give a bad input 400 times per level which is not a realistic concern. This would take
+            the user about 3 hours of nonstop bad inputs. Realisticly only 100 or so will occur overall,
+            and even if the user were to try and intentionally break the program they would struggle.*/
+            try
+            {
+
+                Console.WriteLine(i);
+                StackOverflowTest(d, i + 1);
+            }
+            catch
+            {
+                Sleep(10000);
+            }
+        }
         static void MainMenu()
         {
-            //Console.Clear();
+            Console.Clear();
             string title = System.IO.File.ReadAllText("title.txt");
             Console.WriteLine(title);
             Console.WriteLine(
@@ -97,7 +109,7 @@ press 2 to toggle typewriter mode (Currently {(typeWriteOn ? "On" : "Off")})");
             switch (choice.KeyChar.ToString())
             {
                 case "1":
-                    //Console.Clear();
+                    Console.Clear();
                     MainGame();
                     break;
                 case "2":
@@ -146,10 +158,10 @@ The effects of a move will scale up with how accurately you answer the question.
             string choice = Console.ReadKey().KeyChar.ToString().ToLower();
             if (choice == "y")
             {
-                //Console.Clear();
+                Console.Clear();
                 TypeWrite("Ok. Lets begin!");
                 Sleep(1000);
-                //Console.Clear();
+                Console.Clear();
             }
             else
             {
@@ -164,32 +176,41 @@ The effects of a move will scale up with how accurately you answer the question.
         }
         static void Battle()
         {
-
-            foreach (Attack a in attacks)
-            {
-                Console.WriteLine(a.name);
-            }
             Dino curEnemy = dinos[random.Next(0, dinos.Count)].MakeClone(); //FIXME: might return Empty
             Dino PlayerDino = playerDinos[selectedDino];
             TypeWrite($"Battle between your {PlayerDino.name} and enemy {curEnemy.name}");
             Sleep(250);
             while (PlayerDino.health > 0 && curEnemy.health > 0)
             {
-                TypeWrite($"Friendly {PlayerDino.name} health is {PlayerDino.health}\nEnemy {curEnemy.name} health is {curEnemy.health}\n");
-                TypeWrite(
-@$"Select attack
-    1: {PlayerDino.attacks[0].name}
-    2: {PlayerDino.attacks[1].name}
-    3: {PlayerDino.attacks[2].name}
-    4: {PlayerDino.attacks[3].name}
-");
-                string option = Console.ReadKey().KeyChar.ToString();
-                switch (option)
-                {
-                    case "1":
-                        break;
-                }
+                GetAttack(PlayerDino, curEnemy);
+
             }
+        }
+        static void GetAttack(Dino pDino, Dino enemy)
+        {
+            TypeWrite($"Friendly {pDino.name} health is {pDino.health}\nEnemy {enemy.name} health is {enemy.health}\n");
+            TypeWrite(
+@$"Select attack
+    1: {getAttackString(pDino.attacks[0])}
+    2: {getAttackString(pDino.attacks[1])}
+    3: {getAttackString(pDino.attacks[2])}
+    4: {getAttackString(pDino.attacks[3])}
+");
+            string option = Console.ReadKey().KeyChar.ToString();
+            try
+            {
+                int choice = int.Parse(option) - 1;
+            }
+            catch
+            {
+                TypeWrite("Invalid answer");
+                Sleep(500);
+                GetAttack(pDino, enemy);
+            }
+        }
+        static string getAttackString(Attack a)
+        {
+            return ($"{a.name} ({a.uses}/{a.maxUses})");
         }
     }
 }
