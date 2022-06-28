@@ -19,10 +19,12 @@ namespace DTP_Assessment_2022
             this.uses = maxUses;
             this.name = name;
         }
+        //dereference object
         public Attack MakeClone()
         {
             return new Attack(selfDefense, selfAttack, enemyDefense, enemyAttack, maxUses, name);
         }
+        //run an attack
         public void UseAttack(float multiplier, Dino selfDino, Dino enemyDino)
         {
             //amount > 0 ? amount * (float)Math.Log(Math.Max(attack,0)+2) : amount;

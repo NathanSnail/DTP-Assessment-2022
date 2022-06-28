@@ -19,7 +19,9 @@ namespace DTP_Assessment_2022
             this.attacks = attacks;
             this.name = name;
         }
+        //accounts for defense
         public void TakeDamage(float amount) => health -= amount > 0 ? Math.Max(amount - defense, 0) : amount;
+        //dereference
         public Dino MakeClone() => new Dino(maxHealth, attack, defense, new Attack[]
         { attacks[0].MakeClone(), attacks[1].MakeClone(), attacks[2].MakeClone(), attacks[3].MakeClone() },
         name);

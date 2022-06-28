@@ -17,6 +17,7 @@ namespace DTP_Assessment_2022
         static Random random = new Random();
         static List<ContinuousQuestion> questions = new List<ContinuousQuestion>();
         static int rounds = 0;
+        //gets a multiplier and comment from a question
         static (float, string) AskQuestion(ContinuousQuestion q)
         {
             try
@@ -41,6 +42,7 @@ namespace DTP_Assessment_2022
             }
             MainMenu();
         }
+        //gets the dino with a specified name
         static Dino GetDino(string name)
         {
             for (int i = 0; i < dinos.Count; i++)
@@ -55,6 +57,7 @@ namespace DTP_Assessment_2022
             }
             return null!;
         }
+        //gets the attack with the specified name
         static Attack GetAttack(string name)
         {
             for (int i = 0; i < attacks.Count; i++)
@@ -66,10 +69,12 @@ namespace DTP_Assessment_2022
             }
             return null!;
         }
+        //loads the json data file and proccessess it
         static void GenData()
         {
             JsonNode data = JsonNode.Parse(System.IO.File.ReadAllText("data.json"))!;
             JsonNode attacksJson = data["attacks"]!;
+            //loop through each attack, dino, question
             for (int i = 0; i < attacksJson.AsArray().Count; i++)
             {
                 string name = attacksJson.AsArray()[i]!["name"]!.GetValue<string>();
@@ -122,6 +127,7 @@ namespace DTP_Assessment_2022
                 Sleep(10000);
             }
         }
+        //just gets the settings and starts the game
         static void MainMenu()
         {
             Console.Clear();
@@ -131,7 +137,7 @@ namespace DTP_Assessment_2022
 @$"
 Press 1 for the main game
 press 2 to toggle typewriter mode (Currently {(typeWriteOn ? "On" : "Off")})
-press 3 to toggle noSleep mode (Currently {(debugNoSleep ? "On" : "Off")})");
+press 3 to NoSleep mode (no pauses for reading) (Currently {(debugNoSleep ? "On" : "Off")})");
             ConsoleKeyInfo choice = Console.ReadKey();
             switch (choice.KeyChar.ToString())
             {
@@ -152,6 +158,7 @@ press 3 to toggle noSleep mode (Currently {(debugNoSleep ? "On" : "Off")})");
                     break;
             }
         }
+        //these 3 functions handle all inputs
         static void ClearKeyBuffer()
         {
             while (Console.KeyAvailable) { Console.ReadKey(true); };
@@ -179,6 +186,7 @@ press 3 to toggle noSleep mode (Currently {(debugNoSleep ? "On" : "Off")})");
                 Console.Write(message);
             }
         }
+        //not actually used much, basically a second menu
         static void MainGame()
         {
             TypeWrite(
@@ -206,6 +214,7 @@ The effects of a move will scale up with how accurately you answer the question.
                 Battle();
             }
         }
+        //controls the flow of a whole battle
         static void Battle()
         {
             rounds += 1;
@@ -222,6 +231,7 @@ The effects of a move will scale up with how accurately you answer the question.
                 SelectDino();
             }
         }
+        //controls the flow of an individual round
         static void DoRound(Dino pDino, Dino enemy)
         {
             TypeWrite(@$"
@@ -319,6 +329,7 @@ Select Move
                 DoRound(pDino, enemy);
             }
         }
+        //changes the players active dino
         static void SelectDino()
         {
             bool lose = false;
@@ -369,9 +380,10 @@ Select Move
                 SelectDino();
             }
         }
+        //gets the string which describes a move
         static (string, bool) GetAttackString(Attack a)
         {
-            return (($"{a.name} ({a.uses}/{a.maxUses})", a.uses == 0)); //currently unused data for not able to do uses
+            return (($"{a.name} ({a.uses}/{a.maxUses})", a.uses == 0));
         }
     }
 }
