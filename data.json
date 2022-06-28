@@ -13,7 +13,7 @@
             "selfAttack": 2,
             "enemyDefense": 7,
             "enemyAttack": 0,
-            "maxUses": 50
+            "maxUses": 25
         },
         {
             "name": "Empty",

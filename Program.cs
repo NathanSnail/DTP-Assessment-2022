@@ -8,6 +8,7 @@ namespace DTP_Assessment_2022
         static Dino[] playerDinos = new Dino[6];
         static int selectedDino = 0;
         static bool typeWriteOn = true;
+        static bool debugNoSleep = false;
         static List<Dino> dinos = new List<Dino>();
         static List<Attack> attacks = new List<Attack>();
         static Random random = new Random();
@@ -104,7 +105,8 @@ namespace DTP_Assessment_2022
             Console.WriteLine(
 @$"
 Press 1 for the main game
-press 2 to toggle typewriter mode (Currently {(typeWriteOn ? "On" : "Off")})");
+press 2 to toggle typewriter mode (Currently {(typeWriteOn ? "On" : "Off")})
+press 3 to toggle noSleep mode (Currently {(debugNoSleep ? "On" : "Off")})");
             ConsoleKeyInfo choice = Console.ReadKey();
             switch (choice.KeyChar.ToString())
             {
@@ -114,6 +116,10 @@ press 2 to toggle typewriter mode (Currently {(typeWriteOn ? "On" : "Off")})");
                     break;
                 case "2":
                     typeWriteOn = !typeWriteOn;
+                    MainMenu();
+                    break;
+                case "3":
+                    debugNoSleep = !debugNoSleep;
                     MainMenu();
                     break;
                 default:
@@ -129,8 +135,11 @@ press 2 to toggle typewriter mode (Currently {(typeWriteOn ? "On" : "Off")})");
 
         static void Sleep(int milis)
         {
-            System.Threading.Thread.Sleep(milis);
-            ClearKeyBuffer();
+            if (!debugNoSleep)
+            {
+                System.Threading.Thread.Sleep(milis);
+                ClearKeyBuffer();
+            }
         }
         static void TypeWrite(string message, int timePerKey = 10)
         {
@@ -178,7 +187,7 @@ The effects of a move will scale up with how accurately you answer the question.
         {
             Dino curEnemy = dinos[random.Next(0, dinos.Count)].MakeClone(); //FIXME: might return Empty
             Dino PlayerDino = playerDinos[selectedDino];
-            TypeWrite($"Battle between your {PlayerDino.name} and enemy {curEnemy.name}");
+            TypeWrite($"Battle between your {PlayerDino.name} and enemy {curEnemy.name}\n");
             Sleep(250);
             while (PlayerDino.health > 0 && curEnemy.health > 0)
             {
@@ -191,26 +200,34 @@ The effects of a move will scale up with how accurately you answer the question.
             TypeWrite($"Friendly {pDino.name} health is {pDino.health}\nEnemy {enemy.name} health is {enemy.health}\n");
             TypeWrite(
 @$"Select attack
-    1: {getAttackString(pDino.attacks[0])}
-    2: {getAttackString(pDino.attacks[1])}
-    3: {getAttackString(pDino.attacks[2])}
-    4: {getAttackString(pDino.attacks[3])}
+    1: {getAttackString(pDino.attacks[0]).Item1}
+    2: {getAttackString(pDino.attacks[1]).Item1}
+    3: {getAttackString(pDino.attacks[2]).Item1}
+    4: {getAttackString(pDino.attacks[3]).Item1}
 ");
             string option = Console.ReadKey().KeyChar.ToString();
             try
             {
                 int choice = int.Parse(option) - 1;
+                if (pDino.attacks[choice].uses > 0)
+                {
+                    pDino.attacks[choice].useAttack(1.0f, pDino, enemy);
+                }
+                else
+                {
+                    TypeWrite("That attack has no more uses");
+                }
             }
             catch
             {
-                TypeWrite("Invalid answer");
+                TypeWrite("Invalid choice");
                 Sleep(500);
                 GetAttack(pDino, enemy);
             }
         }
-        static string getAttackString(Attack a)
+        static (string, bool) getAttackString(Attack a)
         {
-            return ($"{a.name} ({a.uses}/{a.maxUses})");
+            return (($"{a.name} ({a.uses}/{a.maxUses})", a.uses == 0)); //currently unused data for not able to do uses
         }
     }
 }
