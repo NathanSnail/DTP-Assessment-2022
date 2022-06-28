@@ -1,5 +1,16 @@
 {
-    "attacks": [{
+    "questions": [
+        {
+            "question": "What percentage of greenhouse gas emissions in New Zealand are produced by agriculture?",
+            "answer": 48.1
+        },
+        {
+            "question": "What percentage of greenhouse gas emissions in New Zealand are produced by energy and road transport?",
+            "answer": 40.7
+        }
+    ],
+    "attacks": [
+        {
             "name": "Swipe",
             "selfDefense": 0,
             "selfAttack": 0,
@@ -24,7 +35,8 @@
             "maxUses": 0
         }
     ],
-    "dinos": [{
+    "dinos": [
+        {
             "name": "Basic",
             "hp": 10,
             "attack": 1,

@@ -13,11 +13,7 @@ namespace DTP_Assessment_2022
         {
             //try to cast to desired type
             string trimmed = guess.Trim();
-            /*
-            find index of letters to remove units from answer
-            a way to handle answers like 100 million would be a good improvement and should be added later
-            FEATURE
-            */
+            // find index of letters to remove units from answer
             Regex floatCheck = new Regex(@"[0-9]|\."); //all characters which belong in a float eg 17.2743
             List<int> deadChars = new List<int>();
             for (int i = trimmed.Length - 1; i >= 0; i--)

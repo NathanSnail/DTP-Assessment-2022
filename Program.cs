@@ -15,6 +15,7 @@ namespace DTP_Assessment_2022
         static List<Dino> dinos = new List<Dino>();
         static List<Attack> attacks = new List<Attack>();
         static Random random = new Random();
+        static List<ContinuousQuestion> questions = new List<ContinuousQuestion>();
         static (float, string) askQuestion(ContinuousQuestion q)
         {
             try
@@ -93,6 +94,13 @@ namespace DTP_Assessment_2022
                 }
                 dinoAttacks.Add(GetAttack("Empty"));
                 dinos.Add(new Dino(hp, attack, defense, dinoAttacks.ToArray(), name).MakeClone());
+            }
+            JsonNode questionJson = data["questions"];
+            for (int i = 0; i < questionJson.AsArray().Count; i++)
+            {
+                string question = questionJson.AsArray()[i]["question"].GetValue<string>();
+                float answer = questionJson.AsArray()[i]["answer"].GetValue<float>();
+                questions.Add(new ContinuousQuestion(question, answer));
             }
         }
         static void StackOverflowTest(Dino d, int i)
@@ -275,7 +283,23 @@ Select Move
                 }
                 else if (pDino.attacks[choice].uses > 0)
                 {
-                    pDino.attacks[choice].useAttack(1.0f, pDino, enemy);
+                    ContinuousQuestion question = questions[random.Next(0, questions.Count)];
+                askQuestion:
+                    TypeWrite(question.getQuestion() + "\n");
+                    string ans = Console.ReadLine();
+                    float multiplier;
+                    try
+                    {
+                        (float,string) questionResult = question.getMultiplier(ans);
+                        TypeWrite(questionResult.Item2 + "\n" + questionResult.Item1);
+                        multiplier = questionResult.Item1;
+                        Sleep(500);
+                    }
+                    catch
+                    {
+                        goto askQuestion; //best solution to this problem unfortunately
+                    }
+                    pDino.attacks[choice].useAttack(multiplier, pDino, enemy);
                     List<int> validAttacks = new List<int>();
                     for (int i = 0; i < 4; i++) { if (enemy.attacks[i].uses > 0) { validAttacks.Add(i); } }
                     int enemyAttackID = random.Next(0, validAttacks.Count);
