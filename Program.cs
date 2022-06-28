@@ -231,13 +231,47 @@ Select Move
             try
             {
                 int choice = int.Parse(option) - 1;
-                if (choice == 5)
+                if (choice == 4) //offset by 1
                 {
                     SelectDino();
                 }
-                else if (choice == 6)
+                else if (choice == 5) //offset by 1
                 {
-                    
+                    if (befriends > 0)
+                    {
+                        Console.Clear();
+                        for (int i = 0; i < playerDinos.Length; i++)
+                        {
+                            Dino d = playerDinos[i];
+                            if (d.health > 0)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Gray;
+                            }
+                            TypeWrite($"{i + 1}: " + d.name + "\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    Select:
+                        TypeWrite("What number dino do you want to swap it with??\n");
+                        try
+                        {
+                            int dchoice = int.Parse(Console.ReadKey().KeyChar.ToString());
+                            playerDinos[dchoice - 1] = enemy.MakeClone();
+                            enemy.health = 0;
+                            befriends -= 1;
+                        }
+                        catch
+                        {
+                            TypeWrite("Invalid choice");
+                            Sleep(500);
+                            goto Select; //goto is the best choice here
+                        }
+                    }
+                    else
+                    {
+                        TypeWrite("No befriends left");
+                        Sleep(500);
+                        Console.Clear();
+                    }
                 }
                 else if (pDino.attacks[choice].uses > 0)
                 {
@@ -264,7 +298,11 @@ Select Move
             bool lose = false;
             foreach (Dino d in playerDinos)
             {
-                lose = lose || d.health <= 0;
+                if (d.name != "Empty")
+                {
+                    Console.WriteLine(d.name);
+                    lose = lose || d.health <= 0;
+                }
             }
             if (lose)
             {
@@ -278,16 +316,17 @@ Select Move
                 {
                     Console.ForegroundColor = ConsoleColor.Gray;
                 }
-                TypeWrite($"{i}: " + d.name + "\n");
+                TypeWrite($"{i + 1}: " + d.name + "\n");
                 Console.ForegroundColor = ConsoleColor.White;
             }
             TypeWrite("What number dino?\n");
             try
             {
                 int choice = int.Parse(Console.ReadKey().KeyChar.ToString());
-                if (playerDinos[choice].health > 0)
+                if (playerDinos[choice - 1].health > 0)
                 {
-                    selectedDino = choice;
+                    selectedDino = choice - 1;
+                    Console.Clear();
                 }
                 else
                 {
