@@ -36,8 +36,8 @@ namespace DTP_Assessment_2022
             float enemyDamage = enemyAttack > 0 ? enemyAttack * (float)Math.Log(Math.Max(selfDino.attack, 0) + 2) : enemyAttack;
             enemyDino.TakeDamage(enemyDamage > 0 ? enemyDamage * multiplier : enemyDamage / multiplier);
             selfDino.TakeDamage(selfAttack > 0 ? selfAttack / multiplier : selfAttack * multiplier);
-            enemyDino.defense -= enemyDefense > 0 ? enemyDefense * multiplier : enemyDefense / multiplier;
-            selfDino.defense -= selfDefense > 0 ? selfDefense / multiplier : selfDefense * multiplier;
+            enemyDino.defenseModifier -= enemyDefense > 0 ? enemyDefense * multiplier : enemyDefense / multiplier;
+            selfDino.defenseModifier -= selfDefense > 0 ? selfDefense / multiplier : selfDefense * multiplier;
         }
     }
 }

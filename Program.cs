@@ -218,7 +218,12 @@ The effects of a move will scale up with how accurately you answer the question.
         static void Battle()
         {
             rounds += 1;
-            Dino curEnemy = dinos[random.Next(0, dinos.Count)].MakeClone(); //FIXME: might return Empty
+        genEnemy:
+            Dino curEnemy = dinos[random.Next(0, dinos.Count)].MakeClone();
+            if (curEnemy.name == "Empty")
+            {
+                goto genEnemy;
+            }
             Dino PlayerDino = playerDinos[selectedDino];
             TypeWrite($"Battle between your {PlayerDino.name} and enemy {curEnemy.name}\n");
             Sleep(250);
