@@ -137,7 +137,7 @@ namespace DTP_Assessment_2022
 @$"
 Press 1 for the main game
 press 2 to toggle typewriter mode (Currently {(typeWriteOn ? "On" : "Off")})
-press 3 to NoSleep mode (no pauses for reading) (Currently {(debugNoSleep ? "On" : "Off")})");
+press 3 to No Sleep mode (no pauses for reading) (Currently {(debugNoSleep ? "On" : "Off")})");
             ConsoleKeyInfo choice = Console.ReadKey();
             switch (choice.KeyChar.ToString())
             {
@@ -292,7 +292,7 @@ Select Move
                         }
                         catch
                         {
-                            TypeWrite("Invalid choice");
+                            TypeWrite("\nInvalid choice\n");
                             Sleep(500);
                             goto Select; //goto is the best choice here
                         }
@@ -314,7 +314,7 @@ Select Move
                     try
                     {
                         (float, string) questionResult = question.GetMultiplier(ans);
-                        TypeWrite(questionResult.Item2 + "\n" + questionResult.Item1);
+                        TypeWrite(questionResult.Item2 + "\n");
                         multiplier = questionResult.Item1;
                         Sleep(500);
                     }
@@ -386,7 +386,7 @@ Select Move
             }
             catch
             {
-                TypeWrite("Invalid choice");
+                TypeWrite("\nInvalid choice\n");
                 Sleep(500);
                 SelectDino();
             }
