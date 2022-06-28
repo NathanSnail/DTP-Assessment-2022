@@ -5,6 +5,8 @@ namespace DTP_Assessment_2022
 {
     internal static class Program
     {
+        static float minMultiplier = 0.5f;
+        static float maxMultiplier = 1.5f;
         static Dino[] playerDinos = new Dino[6];
         static int selectedDino = 0;
         static bool typeWriteOn = true;
@@ -191,19 +193,24 @@ The effects of a move will scale up with how accurately you answer the question.
             Sleep(250);
             while (PlayerDino.health > 0 && curEnemy.health > 0)
             {
-                GetAttack(PlayerDino, curEnemy);
+                DoRound(PlayerDino, curEnemy);
 
             }
         }
-        static void GetAttack(Dino pDino, Dino enemy)
+        static void DoRound(Dino pDino, Dino enemy)
         {
-            TypeWrite($"Friendly {pDino.name} health is {pDino.health}\nEnemy {enemy.name} health is {enemy.health}\n");
-            TypeWrite(
-@$"Select attack
+            TypeWrite(@$"
+Friendly {pDino.name} health is {Math.Round(pDino.health)}
+Enemy {enemy.name} health is {Math.Round(enemy.health)}
+");
+            TypeWrite(@$"
+Select Move
     1: {getAttackString(pDino.attacks[0]).Item1}
     2: {getAttackString(pDino.attacks[1]).Item1}
     3: {getAttackString(pDino.attacks[2]).Item1}
     4: {getAttackString(pDino.attacks[3]).Item1}
+    5: Swap Dinos
+    6: Befriend Enemy
 ");
             string option = Console.ReadKey().KeyChar.ToString();
             try
@@ -212,6 +219,11 @@ The effects of a move will scale up with how accurately you answer the question.
                 if (pDino.attacks[choice].uses > 0)
                 {
                     pDino.attacks[choice].useAttack(1.0f, pDino, enemy);
+                    Console.WriteLine(enemy.health);
+                    List<int> validAttacks = new List<int>();
+                    for (int i = 0; i < 4; i++) { if (enemy.attacks[i].uses > 0) { validAttacks.Add(i); } }
+                    int enemyAttackID = random.Next(0, validAttacks.Count);
+                    enemy.attacks[enemyAttackID].useAttack(random.NextSingle() * (maxMultiplier - minMultiplier) + minMultiplier, enemy, pDino); //for some reason c#s random doesnt like floats
                 }
                 else
                 {
@@ -222,7 +234,7 @@ The effects of a move will scale up with how accurately you answer the question.
             {
                 TypeWrite("Invalid choice");
                 Sleep(500);
-                GetAttack(pDino, enemy);
+                DoRound(pDino, enemy);
             }
         }
         static (string, bool) getAttackString(Attack a)
