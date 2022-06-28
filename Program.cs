@@ -5,6 +5,7 @@ namespace DTP_Assessment_2022
 {
     internal static class Program
     {
+        static int befriends = 7;
         static float minMultiplier = 0.5f;
         static float maxMultiplier = 1.5f;
         static Dino[] playerDinos = new Dino[6];
@@ -14,6 +15,19 @@ namespace DTP_Assessment_2022
         static List<Dino> dinos = new List<Dino>();
         static List<Attack> attacks = new List<Attack>();
         static Random random = new Random();
+        static (float, string) askQuestion(ContinuousQuestion q)
+        {
+            try
+            {
+                TypeWrite(q.getQuestion() + "\n");
+                string choice = Console.ReadLine();
+                return (q.getMultiplier(choice));
+            }
+            catch
+            {
+                return askQuestion(q);
+            }
+        }
         static void Main(string[] args)
         {
             genData();
@@ -133,8 +147,6 @@ press 3 to toggle noSleep mode (Currently {(debugNoSleep ? "On" : "Off")})");
         {
             while (Console.KeyAvailable) { Console.ReadKey(true); };
         }
-
-
         static void Sleep(int milis)
         {
             if (!debugNoSleep)
@@ -194,7 +206,10 @@ The effects of a move will scale up with how accurately you answer the question.
             while (PlayerDino.health > 0 && curEnemy.health > 0)
             {
                 DoRound(PlayerDino, curEnemy);
-
+            }
+            if (PlayerDino.health <= 0)
+            {
+                SelectDino();
             }
         }
         static void DoRound(Dino pDino, Dino enemy)
@@ -210,20 +225,27 @@ Select Move
     3: {getAttackString(pDino.attacks[2]).Item1}
     4: {getAttackString(pDino.attacks[3]).Item1}
     5: Swap Dinos
-    6: Befriend Enemy
+    6: Befriend Enemy ({befriends} remaining)
 ");
             string option = Console.ReadKey().KeyChar.ToString();
             try
             {
                 int choice = int.Parse(option) - 1;
-                if (pDino.attacks[choice].uses > 0)
+                if (choice == 5)
+                {
+                    SelectDino();
+                }
+                else if (choice == 6)
+                {
+                    
+                }
+                else if (pDino.attacks[choice].uses > 0)
                 {
                     pDino.attacks[choice].useAttack(1.0f, pDino, enemy);
-                    Console.WriteLine(enemy.health);
                     List<int> validAttacks = new List<int>();
                     for (int i = 0; i < 4; i++) { if (enemy.attacks[i].uses > 0) { validAttacks.Add(i); } }
                     int enemyAttackID = random.Next(0, validAttacks.Count);
-                    enemy.attacks[enemyAttackID].useAttack(random.NextSingle() * (maxMultiplier - minMultiplier) + minMultiplier, enemy, pDino); //for some reason c#s random doesnt like floats
+                    enemy.attacks[enemyAttackID].useAttack(random.NextSingle() * (maxMultiplier - minMultiplier) + minMultiplier, enemy, pDino); //for some reason c#'s random doesnt like floats
                 }
                 else
                 {
@@ -235,6 +257,50 @@ Select Move
                 TypeWrite("Invalid choice");
                 Sleep(500);
                 DoRound(pDino, enemy);
+            }
+        }
+        static void SelectDino()
+        {
+            bool lose = false;
+            foreach (Dino d in playerDinos)
+            {
+                lose = lose || d.health <= 0;
+            }
+            if (lose)
+            {
+                Environment.Exit(0);
+            }
+            Console.Clear();
+            for (int i = 0; i < playerDinos.Length; i++)
+            {
+                Dino d = playerDinos[i];
+                if (d.health > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
+                TypeWrite($"{i}: " + d.name + "\n");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            TypeWrite("What number dino?\n");
+            try
+            {
+                int choice = int.Parse(Console.ReadKey().KeyChar.ToString());
+                if (playerDinos[choice].health > 0)
+                {
+                    selectedDino = choice;
+                }
+                else
+                {
+                    TypeWrite("Choice is dazed");
+                    Sleep(500);
+                    SelectDino();
+                }
+            }
+            catch
+            {
+                TypeWrite("Invalid choice");
+                Sleep(500);
+                SelectDino();
             }
         }
         static (string, bool) getAttackString(Attack a)
