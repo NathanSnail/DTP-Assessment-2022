@@ -5,9 +5,46 @@
             "answer": 48.1
         },
         {
+            "question": "Per capita, how much carbon dioxide and other greenhouse gas is emitted when flying Auckland to Heathrow, London return? (kg)",
+            "answer": 7796
+        },
+        {
+            "question": "How much of New Zealand’s electricity is generated from renewable resources? %",
+            "answer": 82
+        },
+        {
+            "question": "How much of New Zealand’s greeen house gas emissions are from generating electricity? %",
+            "answer": 5
+        },
+        {
+            "question": "How many single-use plastic bags were distributed in New Zealand in 2018?",
+            "answer": 750000000
+        },
+        {
+            "question": "On average, each New Zealand household wastes how many dollars every year from throwing out food?",
+            "answer": 563
+        },
+        {
+            "question": "How much e-waste is produced in New Zealand each year? (tonnes)",
+            "answer": 95000
+        },
+        {
+            "question": "How fast is a peregrine falcon? km/h",
+            "answer": 360
+        },
+        {
+            "question": "How fast is a cheetah? km/h",
+            "answer": 105
+        },
+        {
+            "question": "How fast is a peregrine lion? km/h",
+            "answer": 80
+        },
+        {
             "question": "What percentage of greenhouse gas emissions in New Zealand are produced by energy and road transport?",
             "answer": 40.7
         }
+
     ],
     "attacks": [
         {
@@ -25,6 +62,46 @@
             "enemyDefense": 7,
             "enemyAttack": 0,
             "maxUses": 25
+        },
+        {
+            "name": "Bite",
+            "selfDefense": 1,
+            "selfAttack": 1,
+            "enemyDefense": 2,
+            "enemyAttack": 5,
+            "maxUses": 25
+        },
+        {
+            "name": "Grab",
+            "selfDefense": 1,
+            "selfAttack": 1,
+            "enemyDefense": 8,
+            "enemyAttack": 0,
+            "maxUses": 15
+        },
+        {
+            "name": "Claw",
+            "selfDefense": 0,
+            "selfAttack": 0,
+            "enemyDefense": -2,
+            "enemyAttack": 8,
+            "maxUses": 15
+        },
+        {
+            "name": "Jump",
+            "selfDefense": 7,
+            "selfAttack": 0,
+            "enemyDefense": 0,
+            "enemyAttack": 0,
+            "maxUses": 50
+        },
+        {
+            "name": "Takedown",
+            "selfDefense": 0,
+            "selfAttack": 0,
+            "enemyDefense": -2,
+            "enemyAttack": 11,
+            "maxUses": 15
         },
         {
             "name": "Empty",
@@ -45,6 +122,61 @@
                 "Swipe",
                 "Swipe",
                 "Swipe"
+            ]
+        },
+        {
+            "name": "Springy",
+            "hp": 10,
+            "attack": 1,
+            "defense": 0,
+            "attacks": [
+                "Jump",
+                "Jump",
+                "Claw"
+            ]
+        },
+        {
+            "name": "Spiney",
+            "hp": 10,
+            "attack": 1,
+            "defense": 0,
+            "attacks": [
+                "Takedown",
+                "Bite",
+                "Scare"
+            ]
+        },
+        {
+            "name": "Strengthy",
+            "hp": 10,
+            "attack": 1,
+            "defense": 0,
+            "attacks": [
+                "Grab",
+                "Grab",
+                "Claw"
+            ]
+        },
+        {
+            "name": "Ghosty",
+            "hp": 10,
+            "attack": 1,
+            "defense": 0,
+            "attacks": [
+                "Scare",
+                "Scare",
+                "Jump"
+            ]
+        },
+        {
+            "name": "Nasty",
+            "hp": 10,
+            "attack": 1,
+            "defense": 0,
+            "attacks": [
+                "Empty",
+                "Empty",
+                "Scare"
             ]
         },
         {

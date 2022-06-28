@@ -192,7 +192,9 @@ press 3 to NoSleep mode (no pauses for reading) (Currently {(debugNoSleep ? "On"
             TypeWrite(
 @"Welcome to the world of enviro dinos, you can have six dinos in your collection at once, and one currently active.
 The main combat of enviro dinos involves selecting a move, and then performing it, each move has unique effects.
-The effects of a move will scale up with how accurately you answer the question. You will also be given some information on if your answer was correct or not.");
+The effects of a move will scale up with how accurately you answer the question. You will also be given some information on if your answer was correct or not.
+
+None of the dinos are based on real dinosaurs, that is not what this game is about");
             Sleep(2500);
             TypeWrite("\nWould you like to begin? Y / N");
             string choice = Console.ReadKey().KeyChar.ToString().ToLower();
@@ -217,6 +219,10 @@ The effects of a move will scale up with how accurately you answer the question.
         //controls the flow of a whole battle
         static void Battle()
         {
+            foreach(Dino d in playerDinos)
+            {
+                d.defenseModifier = 0;
+            }
             rounds += 1;
         genEnemy:
             Dino curEnemy = dinos[random.Next(0, dinos.Count)].MakeClone();
