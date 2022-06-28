@@ -17,31 +17,31 @@ namespace DTP_Assessment_2022
         static Random random = new Random();
         static List<ContinuousQuestion> questions = new List<ContinuousQuestion>();
         static int rounds = 0;
-        static (float, string) askQuestion(ContinuousQuestion q)
+        static (float, string) AskQuestion(ContinuousQuestion q)
         {
             try
             {
-                TypeWrite(q.getQuestion() + "\n");
+                TypeWrite(q.GetQuestion() + "\n");
                 string choice = Console.ReadLine()!;
-                return (q.getMultiplier(choice));
+                return (q.GetMultiplier(choice));
             }
             catch
             {
-                return askQuestion(q);
+                return AskQuestion(q);
             }
         }
         static void Main(string[] args)
         {
-            genData();
-            Dino empty = getDino("Empty");
-            playerDinos[0] = getDino("Basic");
+            GenData();
+            Dino empty = GetDino("Empty");
+            playerDinos[0] = GetDino("Basic");
             for (int i = 1; i < 6; i++)
             {
                 playerDinos[i] = empty.MakeClone();
             }
             MainMenu();
         }
-        static Dino getDino(string name)
+        static Dino GetDino(string name)
         {
             for (int i = 0; i < dinos.Count; i++)
             {
@@ -66,7 +66,7 @@ namespace DTP_Assessment_2022
             }
             return null!;
         }
-        static void genData()
+        static void GenData()
         {
             JsonNode data = JsonNode.Parse(System.IO.File.ReadAllText("data.json"))!;
             JsonNode attacksJson = data["attacks"]!;
@@ -230,10 +230,10 @@ Enemy {enemy.name} health is {Math.Round(enemy.health)}
 ");
             TypeWrite(@$"
 Select Move
-    1: {getAttackString(pDino.attacks[0]).Item1}
-    2: {getAttackString(pDino.attacks[1]).Item1}
-    3: {getAttackString(pDino.attacks[2]).Item1}
-    4: {getAttackString(pDino.attacks[3]).Item1}
+    1: {GetAttackString(pDino.attacks[0]).Item1}
+    2: {GetAttackString(pDino.attacks[1]).Item1}
+    3: {GetAttackString(pDino.attacks[2]).Item1}
+    4: {GetAttackString(pDino.attacks[3]).Item1}
     5: Swap Dinos
     6: Befriend Enemy ({befriends} remaining)
 ");
@@ -287,12 +287,12 @@ Select Move
                 {
                     ContinuousQuestion question = questions[random.Next(0, questions.Count)];
                 askQuestion:
-                    TypeWrite(question.getQuestion() + "\n");
+                    TypeWrite(question.GetQuestion() + "\n");
                     string ans = Console.ReadLine()!;
                     float multiplier;
                     try
                     {
-                        (float, string) questionResult = question.getMultiplier(ans);
+                        (float, string) questionResult = question.GetMultiplier(ans);
                         TypeWrite(questionResult.Item2 + "\n" + questionResult.Item1);
                         multiplier = questionResult.Item1;
                         Sleep(500);
@@ -301,11 +301,11 @@ Select Move
                     {
                         goto askQuestion; //best solution to this problem unfortunately
                     }
-                    pDino.attacks[choice].useAttack(multiplier, pDino, enemy);
+                    pDino.attacks[choice].UseAttack(multiplier, pDino, enemy);
                     List<int> validAttacks = new List<int>();
                     for (int i = 0; i < 4; i++) { if (enemy.attacks[i].uses > 0) { validAttacks.Add(i); } }
                     int enemyAttackID = random.Next(0, validAttacks.Count);
-                    enemy.attacks[enemyAttackID].useAttack(random.NextSingle() * (maxMultiplier - minMultiplier) + minMultiplier, enemy, pDino); //for some reason c#'s random doesnt like floats
+                    enemy.attacks[enemyAttackID].UseAttack(random.NextSingle() * (maxMultiplier - minMultiplier) + minMultiplier, enemy, pDino); //for some reason c#'s random doesnt like floats
                 }
                 else
                 {
@@ -369,7 +369,7 @@ Select Move
                 SelectDino();
             }
         }
-        static (string, bool) getAttackString(Attack a)
+        static (string, bool) GetAttackString(Attack a)
         {
             return (($"{a.name} ({a.uses}/{a.maxUses})", a.uses == 0)); //currently unused data for not able to do uses
         }

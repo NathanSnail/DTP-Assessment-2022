@@ -19,11 +19,11 @@ namespace DTP_Assessment_2022
             this.uses = maxUses;
             this.name = name;
         }
-        public Attack makeClone()
+        public Attack MakeClone()
         {
             return new Attack(selfDefense, selfAttack, enemyDefense, enemyAttack, maxUses, name);
         }
-        public void useAttack(float multiplier, Dino selfDino, Dino enemyDino)
+        public void UseAttack(float multiplier, Dino selfDino, Dino enemyDino)
         {
             //amount > 0 ? amount * (float)Math.Log(Math.Max(attack,0)+2) : amount;
             if (uses <= 0)
@@ -32,8 +32,8 @@ namespace DTP_Assessment_2022
             }
             uses -= 1;
             float enemyDamage = enemyAttack > 0 ? enemyAttack * (float)Math.Log(Math.Max(selfDino.attack, 0) + 2) : enemyAttack;
-            enemyDino.takeDamage(enemyDamage > 0 ? enemyDamage * multiplier : enemyDamage / multiplier);
-            selfDino.takeDamage(selfAttack > 0 ? selfAttack / multiplier : selfAttack * multiplier);
+            enemyDino.TakeDamage(enemyDamage > 0 ? enemyDamage * multiplier : enemyDamage / multiplier);
+            selfDino.TakeDamage(selfAttack > 0 ? selfAttack / multiplier : selfAttack * multiplier);
             enemyDino.defense -= enemyDefense > 0 ? enemyDefense * multiplier : enemyDefense / multiplier;
             selfDino.defense -= selfDefense > 0 ? selfDefense / multiplier : selfDefense * multiplier;
         }

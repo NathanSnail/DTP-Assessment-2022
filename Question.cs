@@ -5,6 +5,6 @@ public abstract class Question
     {
         this.questionString = questionString;
     }
-    public abstract string getQuestion();
-    public abstract (float,string) getMultiplier(string answer);
+    public abstract string GetQuestion();
+    public abstract (float,string) GetMultiplier(string answer);
 }
