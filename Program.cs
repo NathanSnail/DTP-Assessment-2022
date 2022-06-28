@@ -16,12 +16,13 @@ namespace DTP_Assessment_2022
         static List<Attack> attacks = new List<Attack>();
         static Random random = new Random();
         static List<ContinuousQuestion> questions = new List<ContinuousQuestion>();
+        static int rounds = 0;
         static (float, string) askQuestion(ContinuousQuestion q)
         {
             try
             {
                 TypeWrite(q.getQuestion() + "\n");
-                string choice = Console.ReadLine();
+                string choice = Console.ReadLine()!;
                 return (q.getMultiplier(choice));
             }
             catch
@@ -52,7 +53,7 @@ namespace DTP_Assessment_2022
                     return (d);
                 }
             }
-            return null;
+            return null!;
         }
         static Attack GetAttack(string name)
         {
@@ -63,43 +64,43 @@ namespace DTP_Assessment_2022
                     return (attacks[i]);
                 }
             }
-            return null;
+            return null!;
         }
         static void genData()
         {
-            JsonNode data = JsonNode.Parse(System.IO.File.ReadAllText("data.json"));
-            JsonNode attacksJson = data["attacks"];
+            JsonNode data = JsonNode.Parse(System.IO.File.ReadAllText("data.json"))!;
+            JsonNode attacksJson = data["attacks"]!;
             for (int i = 0; i < attacksJson.AsArray().Count; i++)
             {
-                string name = attacksJson.AsArray()[i]["name"].GetValue<string>();
-                int selfDefense = attacksJson.AsArray()[i]["selfDefense"].GetValue<int>();
-                int selfAttack = attacksJson.AsArray()[i]["selfAttack"].GetValue<int>();
-                int enemyDefense = attacksJson.AsArray()[i]["enemyDefense"].GetValue<int>();
-                int enemyAttack = attacksJson.AsArray()[i]["enemyAttack"].GetValue<int>();
-                int maxUses = attacksJson.AsArray()[i]["maxUses"].GetValue<int>();
+                string name = attacksJson.AsArray()[i]!["name"]!.GetValue<string>();
+                int selfDefense = attacksJson.AsArray()[i]!["selfDefense"]!.GetValue<int>();
+                int selfAttack = attacksJson.AsArray()[i]!["selfAttack"]!.GetValue<int>();
+                int enemyDefense = attacksJson.AsArray()[i]!["enemyDefense"]!.GetValue<int>();
+                int enemyAttack = attacksJson.AsArray()[i]!["enemyAttack"]!.GetValue<int>();
+                int maxUses = attacksJson.AsArray()[i]!["maxUses"]!.GetValue<int>();
                 attacks.Add(new Attack(selfDefense, selfAttack, enemyDefense, enemyAttack, maxUses, name));
             }
-            JsonNode dinosJson = data["dinos"];
+            JsonNode dinosJson = data["dinos"]!;
             for (int i = 0; i < dinosJson.AsArray().Count; i++)
             {
-                string name = dinosJson.AsArray()[i]["name"].GetValue<string>();
-                int hp = dinosJson.AsArray()[i]["hp"].GetValue<int>();
-                int attack = dinosJson.AsArray()[i]["attack"].GetValue<int>();
-                int defense = dinosJson.AsArray()[i]["defense"].GetValue<int>();
+                string name = dinosJson.AsArray()[i]!["name"]!.GetValue<string>();
+                int hp = dinosJson.AsArray()[i]!["hp"]!.GetValue<int>();
+                int attack = dinosJson.AsArray()[i]!["attack"]!.GetValue<int>();
+                int defense = dinosJson.AsArray()[i]!["defense"]!.GetValue<int>();
                 List<Attack> dinoAttacks = new List<Attack>();
-                JsonArray attacksArray = dinosJson.AsArray()[i]["attacks"].AsArray();
+                JsonArray attacksArray = dinosJson.AsArray()[i]!["attacks"]!.AsArray();
                 for (int j = 0; j < 3; j++)
                 {
-                    dinoAttacks.Add(GetAttack(attacksArray[j].ToString()));
+                    dinoAttacks.Add(GetAttack(attacksArray[j]!.ToString()));
                 }
                 dinoAttacks.Add(GetAttack("Empty"));
                 dinos.Add(new Dino(hp, attack, defense, dinoAttacks.ToArray(), name).MakeClone());
             }
-            JsonNode questionJson = data["questions"];
+            JsonNode questionJson = data["questions"]!;
             for (int i = 0; i < questionJson.AsArray().Count; i++)
             {
-                string question = questionJson.AsArray()[i]["question"].GetValue<string>();
-                float answer = questionJson.AsArray()[i]["answer"].GetValue<float>();
+                string question = questionJson.AsArray()[i]!["question"]!.GetValue<string>();
+                float answer = questionJson.AsArray()[i]!["answer"]!.GetValue<float>();
                 questions.Add(new ContinuousQuestion(question, answer));
             }
         }
@@ -207,6 +208,7 @@ The effects of a move will scale up with how accurately you answer the question.
         }
         static void Battle()
         {
+            rounds += 1;
             Dino curEnemy = dinos[random.Next(0, dinos.Count)].MakeClone(); //FIXME: might return Empty
             Dino PlayerDino = playerDinos[selectedDino];
             TypeWrite($"Battle between your {PlayerDino.name} and enemy {curEnemy.name}\n");
@@ -286,11 +288,11 @@ Select Move
                     ContinuousQuestion question = questions[random.Next(0, questions.Count)];
                 askQuestion:
                     TypeWrite(question.getQuestion() + "\n");
-                    string ans = Console.ReadLine();
+                    string ans = Console.ReadLine()!;
                     float multiplier;
                     try
                     {
-                        (float,string) questionResult = question.getMultiplier(ans);
+                        (float, string) questionResult = question.getMultiplier(ans);
                         TypeWrite(questionResult.Item2 + "\n" + questionResult.Item1);
                         multiplier = questionResult.Item1;
                         Sleep(500);
@@ -330,6 +332,7 @@ Select Move
             }
             if (lose)
             {
+                TypeWrite($"You managed to survive {rounds} rounds. Good Job!");
                 Environment.Exit(0);
             }
             Console.Clear();
